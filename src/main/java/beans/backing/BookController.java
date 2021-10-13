@@ -1,11 +1,10 @@
 package beans.backing;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
-import javax.enterprise.context.RequestScoped;
-import javax.faces.application.FacesMessage;
-import javax.faces.context.FacesContext;
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -14,7 +13,7 @@ import beans.dao.IBookDAO;
 import beans.model.Book;
 
 @Named
-@RequestScoped
+@ApplicationScoped
 public class BookController{
 
 	IBookDAO bookJDBC;
@@ -22,7 +21,7 @@ public class BookController{
 	@Inject
 	private Book book;
 	
-	private List<Book> listBooks;
+	private List<Book> listBooks = new ArrayList<Book>();;
 
 	public Book getBook() {
 		return book;
@@ -40,6 +39,30 @@ public class BookController{
 		this.listBooks = listBooks;
 	}
 	
+	/*
+	@PostConstruct
+	public void init() {
+		listBooks = new ArrayList<Book>();
+		bookJDBC = new BookDaoImpl();
+		try {
+			listBooks = bookJDBC.select();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace(System.out);
+		}
+	}
+	*/
+	
+	public void registrar() {
+		IBookDAO bookJDBC = new BookDaoImpl();
+		try {
+			bookJDBC.insert(book);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
 	public void imprimirLista() {
 		bookJDBC = new BookDaoImpl();
 		try {
@@ -50,15 +73,36 @@ public class BookController{
 		}
 	}
 	
-	public void registrar() {
+	public void leerId(Book book) {
+		bookJDBC = new BookDaoImpl();
+		Book bookTemp;
+		try {
+			bookTemp = bookJDBC.selectForID(book);
+			if(bookTemp != null) {
+				this.book = bookTemp;
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public void modificar() {
 		IBookDAO bookJDBC = new BookDaoImpl();
 		try {
-			bookJDBC.insert(book);
-			String msg = "Se ha insertado el nuevo libro correctamente";
-			FacesMessage facesMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, msg, msg);
-            FacesContext facesContext = FacesContext.getCurrentInstance();
-            String componentId = null;//este es un mensaje global
-            facesContext.addMessage(componentId, facesMessage);
+			bookJDBC.update(book);
+			this.imprimirLista();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public void eliminar(Book book) {
+		IBookDAO bookJDBC = new BookDaoImpl();
+		try {
+			bookJDBC.delete(book);
+			this.imprimirLista();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

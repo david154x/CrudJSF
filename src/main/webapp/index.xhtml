@@ -7,23 +7,72 @@
 </h:head>
 <h:body>
 	<h1>Hola mundo con JSF</h1>
-	<h:form>
-		<p:outputLabel for="isbn" value="ISBN"></p:outputLabel>
-		<p:inputText id="isbn" value="#{bookController.book.id}"></p:inputText>
-		<h:message for="isbn"></h:message>
-		<p:outputLabel for="author" value="Author"></p:outputLabel>
-		<p:inputText id="author" value="#{bookController.book.author}"></p:inputText>
-		<h:message for="author"></h:message>
-		<p:outputLabel for="title" value="Titulo"></p:outputLabel>
-		<p:inputText id="title" value="#{bookController.book.title}"></p:inputText>
-		<h:message for="title"></h:message>
-		<p:outputLabel for="category" value="Categoria"></p:outputLabel>
-		<p:inputText id="category" value="#{bookController.book.category}"></p:inputText>
-		<h:message for="category"></h:message>
-		<p:outputLabel for="anio" value="Año"></p:outputLabel>
-		<p:inputText id="anio" value="#{bookController.book.year}"></p:inputText>
-		<h:message for="anio"></h:message>
-		<p:commandButton actionListener="#{bookController.}" value="Crear libros"></p:commandButton>
+	<h:form id="frm">
+		<p:panelGrid columns="3">
+			<p:outputLabel for="isbn" value="ISBN"></p:outputLabel>
+			<p:inputText id="isbn" value="#{bookController.book.isbn}"></p:inputText>
+			<h:message for="isbn"></h:message>
+			<p:outputLabel for="author" value="Author"></p:outputLabel>
+			<p:inputText id="author" value="#{bookController.book.author}"></p:inputText>
+			<h:message for="author"></h:message>
+			<p:outputLabel for="title" value="Titulo"></p:outputLabel>
+			<p:inputText id="title" value="#{bookController.book.title}"></p:inputText>
+			<h:message for="title"></h:message>
+			<p:outputLabel for="category" value="Categoria"></p:outputLabel>
+			<p:inputText id="category" value="#{bookController.book.category}"></p:inputText>
+			<h:message for="category"></h:message>
+			<p:outputLabel for="anio" value="Año"></p:outputLabel>
+			<p:inputText id="anio" value="#{bookController.book.year}"></p:inputText>
+			<h:message for="anio"></h:message>
+		</p:panelGrid>
+
+		<p:commandButton actionListener="#{bookController.registrar()}"
+			value="Crear libros"></p:commandButton>
+		<p:commandButton actionListener="#{bookController.imprimirLista}"
+			value="Listar libros" update="data"></p:commandButton>
+
+		<p:dataTable id="data" value="#{bookController.listBooks}" var="b">
+			<p:column headerText="ISBN">
+				<p:outputLabel value="#{b.isbn}"></p:outputLabel>
+			</p:column>
+			<p:column headerText="AUTOR">
+				<p:outputLabel value="#{b.author}"></p:outputLabel>
+			</p:column>
+			<p:column headerText="TITULO">
+				<p:outputLabel value="#{b.title}"></p:outputLabel>
+			</p:column>
+			<p:column headerText="CATEGORIA">
+				<p:outputLabel value="#{b.category}"></p:outputLabel>
+			</p:column>
+			<p:column headerText="AÑO">
+				<p:outputLabel value="#{b.year}"></p:outputLabel>
+			</p:column>
+			<p:column headerText="Modificar">
+				<p:commandLink value="Modificar" actionListener="#{bookController.leerId(b)}" oncomplete="PF('wlgDatos').show();" update=":dlgDatos"></p:commandLink>
+				<p:commandLink value="Eliminar" actionListener="#{bookController.eliminar(b)}" update="data"></p:commandLink>
+			</p:column>
+		</p:dataTable>
 	</h:form>
+	<p:dialog header="Datos" widgetVar="wlgDatos" id="dlgDatos">
+		<h:form>
+			<p:outputLabel for="isbn" value="ISBN"></p:outputLabel>
+			<p:inputText id="isbn" value="#{bookController.book.isbn}"></p:inputText>
+			<h:message for="isbn"></h:message>
+			<p:outputLabel for="author" value="Author"></p:outputLabel>
+			<p:inputText id="author" value="#{bookController.book.author}"></p:inputText>
+			<h:message for="author"></h:message>
+			<p:outputLabel for="title" value="Titulo"></p:outputLabel>
+			<p:inputText id="title" value="#{bookController.book.title}"></p:inputText>
+			<h:message for="title"></h:message>
+			<p:outputLabel for="category" value="Categoria"></p:outputLabel>
+			<p:inputText id="category" value="#{bookController.book.category}"></p:inputText>
+			<h:message for="category"></h:message>
+			<p:outputLabel for="anio" value="Año"></p:outputLabel>
+			<p:inputText id="anio" value="#{bookController.book.year}"></p:inputText>
+			<h:message for="anio"></h:message>
+			<p:commandButton value="Modificar" actionListener="#{bookController.modificar()}" oncomplete="PF('wlgDatos').hide();" update=":frm:data"></p:commandButton>
+			<p:commandButton value="Cancelar" immediate="true"></p:commandButton>
+		</h:form>
+	</p:dialog>
 </h:body>
 </html>

@@ -1,13 +1,8 @@
 package beans.model;
 
-import javax.enterprise.context.RequestScoped;
-import javax.inject.Named;
-
-@Named
-@RequestScoped
 public class Book{
 	
-	private String id;
+	private String isbn;
     private String author;
     private String title;
     private String category;
@@ -15,28 +10,32 @@ public class Book{
 
     public Book() {
     }
+    
+    public Book(String isbn) {
+		super();
+		this.isbn = isbn;
+	}
 
-    public Book(String id) {
-        this.id = id;
-    }
+	public Book(String isbn, String author, String title, String category, short year) {
+		super();
+		this.isbn = isbn;
+		this.author = author;
+		this.title = title;
+		this.category = category;
+		this.year = year;
+	}
 
-    public Book(String id, String author, String title, String category, short year) {
-        this.id = id;
-        this.author = author;
-        this.title = title;
-        this.category = category;
-        this.year = year;
-    }
+	public String getIsbn() {
+		return isbn;
+	}
 
-    public String getId() {
-        return id;
-    }
 
-    public void setId(String id) {
-        this.id = id;
-    }
+	public void setIsbn(String isbn) {
+		this.isbn = isbn;
+	}
 
-    public String getAuthor() {
+
+	public String getAuthor() {
         return author;
     }
 
@@ -70,7 +69,7 @@ public class Book{
 
     @Override
     public String toString() {
-        return  "isbn: " + id +
+        return  "isbn: " + isbn +
                 ", author: '" + author + '\'' +
                 ", title: '" + title + '\'' +
                 ", category: '" + category + '\'' +
